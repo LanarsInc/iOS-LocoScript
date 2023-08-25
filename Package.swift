@@ -5,12 +5,8 @@ import PackageDescription
 
 let package = Package(
   name: "LocoScript",
-  platforms: [.macOS(.v12)],
-  products: [
-    .executable(name: "LocoScript", targets: ["LocoScript"]),
-  ],
+  platforms: [.macOS(.v12), .iOS(.v15)],
   targets: [
-    .executableTarget(name: "LocoScript"),
-    .testTarget(name: "LocoScriptTests", dependencies: ["LocoScript"]),
+    .executableTarget(name: "LocoScript")
   ]
 )
