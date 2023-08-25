@@ -4,20 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "LocoScript",
-    products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "LocoScript",
-            targets: ["LocoScript"]),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "LocoScript"),
-        .testTarget(
-            name: "LocoScriptTests",
-            dependencies: ["LocoScript"]),
-    ]
+  name: "LocoScript",
+  platforms: [.macOS(.v12)],
+  products: [
+    .executable(name: "LocoScript", targets: ["LocoScript"]),
+  ],
+  targets: [
+    .executableTarget(name: "LocoScript"),
+    .testTarget(name: "LocoScriptTests", dependencies: ["LocoScript"]),
+  ]
 )
