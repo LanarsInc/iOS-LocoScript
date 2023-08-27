@@ -7,20 +7,21 @@ enum LocoScript {
   static func main() async throws {
     let currentDirectoryPath = FileManager.default.currentDirectoryPath
 
-    print("⚠️ currentDirectoryPath: \(currentDirectoryPath)")
-
-    let loader = StringsLoader(locoAPIKey: "oD8Sxz1qDdVJ4DZyx1jW6C8Q_u5X9Eyy")
-
-    let destinationDirectory = currentDirectoryPath + "/Localization/"
-
-    let tags = [
-      Tag(name: "common", folderPath: destinationDirectory),
-      Tag(name: "iOS", folderPath: destinationDirectory)
-    ]
-    do {
-      try await loader.loadLocalization(for: tags)
-    } catch {
-      print(error.localizedDescription)
+    guard
+      let configurationURL = URL(string: currentDirectoryPath + "/.locoConfig"),
+      let data = FileManager.default.contents(atPath: configurationURL.path)
+    else {
+      throw LocoScriptError.noConfigurationFile
     }
+
+    let configuration = try JSONDecoder().decode(Configuration.self, from: data)
+
+    print("⚠️ currentDirectoryPath: \(currentDirectoryPath)")
+    
+    let loader = StringsLoader(locoAPIKey: configuration.locoAPIKey)
+
+    let tags = configuration.tags.map { Tag(name: $0.key, folderPath: currentDirectoryPath + $0.value) }
+
+    try await loader.loadLocalization(for: tags)
   }
 }

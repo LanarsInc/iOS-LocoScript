@@ -31,7 +31,7 @@ final class StringsLoader {
         try await group.waitForAll()
       }
     } catch {
-      print(error.localizedDescription)
+      throw LocoScriptError.custom(error.localizedDescription)
     }
   }
 }
@@ -63,15 +63,19 @@ private extension StringsLoader {
     let (tempUrl, _) = try await URLSession.shared.download(for: request)
     let (data, _) = try await URLSession.shared.data(from: tempUrl)
 
+    // Template text of strings file from loco.biz takes around 500 bytes
     if data.count < 500 {
-      print("There is no localization strings or tag is incorrect for locale: \(locale), tag: \(tagName)")
+      throw LocoScriptError.emptyStringsFile(locale: locale, tag: tagName)
     }
 
     if FileManager.default.fileExists(atPath: fileURL.path) {
       try data.write(to: fileURL.absoluteURL)
     } else {
-      try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-      FileManager.default.createFile(atPath: fileURL.path, contents: data, attributes: nil)
+      try FileManager.default.createDirectory(
+        at: fileURL.deletingLastPathComponent(), 
+        withIntermediateDirectories: true
+      )
+      FileManager.default.createFile(atPath: fileURL.path, contents: data)
     }
 
     print("Success: \(fileURL.pathComponents.suffix(2).joined(separator: "/"))")
