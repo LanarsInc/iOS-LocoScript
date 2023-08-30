@@ -7,6 +7,8 @@ enum LocoScript {
   static func main() async throws {
     let currentDirectoryPath = FileManager.default.currentDirectoryPath
 
+    print("current root directory: \(currentDirectoryPath)")
+
     guard
       let configurationURL = URL(string: currentDirectoryPath + "/.locoConfig"),
       let data = FileManager.default.contents(atPath: configurationURL.path)
@@ -15,8 +17,6 @@ enum LocoScript {
     }
 
     let configuration = try JSONDecoder().decode(Configuration.self, from: data)
-
-    print("⚠️ currentDirectoryPath: \(currentDirectoryPath)")
     
     let loader = StringsLoader(locoAPIKey: configuration.locoAPIKey)
 
