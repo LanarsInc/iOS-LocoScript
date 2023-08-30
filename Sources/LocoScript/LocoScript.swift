@@ -16,7 +16,7 @@ enum LocoScript {
 
     let configuration = try JSONDecoder().decode(Configuration.self, from: data)
 
-    print("⚠️ currentDirectoryPath: \(currentDirectoryPath)")
+    print("currentDirectoryPath: \(currentDirectoryPath)")
     
     let loader = StringsLoader(locoAPIKey: configuration.locoAPIKey)
 

@@ -29,6 +29,8 @@ final class StringsLoader {
         }
 
         try await group.waitForAll()
+
+        print("✅ Loco script did finish")
       }
     } catch {
       throw LocoScriptError.custom(error.localizedDescription)
@@ -78,6 +80,6 @@ private extension StringsLoader {
       FileManager.default.createFile(atPath: fileURL.path, contents: data)
     }
 
-    print("Success: \(fileURL.pathComponents.suffix(2).joined(separator: "/"))")
+    print("Success: \(fileURL.pathComponents.suffix(3).joined(separator: "/"))")
   }
 }
